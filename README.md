@@ -45,7 +45,21 @@ python app.py
 
 * After Entering all the details the application will display the number of loans the customer is qualified for.
 
-* The application saves the qualified loan data in **data/qualified_loan.csv**
+* The user will be promted whether to save their qualified loan details in a file.
+
+![No Data Promt](Images/save_loan_promt.png)
+
+* If the user wish to save(enter 'y') and if there are qualified loan details to be saved the application asks for the filepath from user to save the details.
+
+![No Data Promt](Images/loan_saved.png)
+
+* If the user wish to save(enter 'y') and if there are **no qualified loan details** to be saved the application exits with a message as follows.
+
+![No Data Promt](Images/no_data_promt.png)
+
+* If the user does not wish to save(enter 'n') then the application exits with following message.
+
+![No Data Promt](Images/not_saved.png)
 
 ---
 

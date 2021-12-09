@@ -101,18 +101,37 @@ def find_qualifying_loans(bank_data, credit_score, debt, income, loan, home_valu
     return bank_data_filtered
 
 def save_qualifying_loans(qualifying_loans, header):
-    """Saves the qualifying loans to a CSV file.
+    """Promts user whether to save the qualifying loans to a CSV file.
+     and promts them for output file path if they wish to save the details.
 
     Args:
         qualifying_loans (list of lists): The qualifying bank loans.
         header (list): Header list for the output csv file
     """
-    output_filepath = "data/qualified_loans.csv"
-    csvpath = Path(output_filepath)
-    if len(qualifying_loans) == 0:
-        sys.exit(f"\nSorry! Since there are no qualifying loans it cannot be saved")
-    save_csv(csvpath, qualifying_loans, header)
-    print(f"\nThe Qualified Loan data list is stored in ", output_filepath)
+
+    # Asking user whether the user wish to save the qualifying loan details.
+    save_to_csv = questionary.text("Do you want to save your qualifying loan details in a csv file? (y/n) : ").ask()
+    
+    if save_to_csv == "y":
+
+        # Not saving if there are no qualifying loans.
+        if len(qualifying_loans) == 0:
+            sys.exit(f"\nSorry! Since there are no qualifying loans it cannot be saved.")
+        else:
+
+            #Promping user for output filepath
+            output_filepath = questionary.text("Please Enter the csv file path : ").ask()
+
+            #Checking if the entered filepth is a .csv file
+            if ".csv" not in output_filepath:
+                output_filepath = output_filepath + ".csv"
+
+            #Saving the qualified loan details in the user specified output file.
+            csvpath = Path(output_filepath)
+            save_csv(csvpath, qualifying_loans, header)
+            print(f"\nThe Qualified Loan data list is stored in ", output_filepath)
+    else:
+        sys.exit(f"\nThank you! The qualified loan details are not saved in a file!")
 
 def run():
     """The main function for running the script."""
