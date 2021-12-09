@@ -10,8 +10,7 @@ import sys
 import fire
 import questionary
 from pathlib import Path
-
-from qualifier.utils.fileio import load_csv
+from qualifier.utils.fileio import load_csv, save_csv
 
 from qualifier.utils.calculators import (
     calculate_monthly_debt_ratio,
@@ -28,7 +27,7 @@ def load_bank_data():
     """Ask for the file path to the latest banking data and load the CSV file.
 
     Returns:
-        The bank data from the data rate sheet CSV file.
+        The bank data and header list from the data rate sheet CSV file.
     """
 
     csvpath = questionary.text("Enter a file path to a rate-sheet (.csv):").ask()
@@ -85,7 +84,7 @@ def find_qualifying_loans(bank_data, credit_score, debt, income, loan, home_valu
 
     # Calculate the monthly debt ratio
     monthly_debt_ratio = calculate_monthly_debt_ratio(debt, income)
-    print(f"The monthly debt to income ratio is {monthly_debt_ratio:.02f}")
+    print(f"\nThe monthly debt to income ratio is {monthly_debt_ratio:.02f}")
 
     # Calculate loan to value ratio
     loan_to_value_ratio = calculate_loan_to_value_ratio(loan, home_value)
@@ -97,15 +96,29 @@ def find_qualifying_loans(bank_data, credit_score, debt, income, loan, home_valu
     bank_data_filtered = filter_debt_to_income(monthly_debt_ratio, bank_data_filtered)
     bank_data_filtered = filter_loan_to_value(loan_to_value_ratio, bank_data_filtered)
 
-    print(f"Found {len(bank_data_filtered)} qualifying loans")
+    print(f"\nFound {len(bank_data_filtered)} qualifying loans")
 
     return bank_data_filtered
+
+def save_qualifying_loans(qualifying_loans, header):
+    """Saves the qualifying loans to a CSV file.
+
+    Args:
+        qualifying_loans (list of lists): The qualifying bank loans.
+        header (list): Header list for the output csv file
+    """
+    output_filepath = "data/qualified_loans.csv"
+    csvpath = Path(output_filepath)
+    if len(qualifying_loans) == 0:
+        sys.exit(f"\nSorry! Since there are no qualifying loans it cannot be saved")
+    save_csv(csvpath, qualifying_loans, header)
+    print(f"\nThe Qualified Loan data list is stored in ", output_filepath)
 
 def run():
     """The main function for running the script."""
 
     # Load the latest Bank data
-    bank_data = load_bank_data()
+    bank_data_header, bank_data = load_bank_data()
 
     # Get the applicant's information
     credit_score, debt, income, loan_amount, home_value = get_applicant_info()
@@ -115,6 +128,8 @@ def run():
         bank_data, credit_score, debt, income, loan_amount, home_value
     )
 
+    # Save qualifying loans
+    save_qualifying_loans(qualifying_loans, bank_data_header)
 
 
 if __name__ == "__main__":

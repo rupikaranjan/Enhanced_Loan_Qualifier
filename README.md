@@ -1,6 +1,6 @@
 # Enhanced_Loan_Qualifier
 
-Enhanced Loan Qualifier Application is a user interactive loan qualifier application. It helps user by proving a list of loans they are qualified for given their financial data.
+Enhanced Loan Qualifier Application is a user interactive loan qualifier application. This application accpets It helps user by proving a list of loans they are qualified for given their financial data.
 
 ---
 
@@ -43,7 +43,9 @@ python app.py
 
 ![User Data CLI](Images/cli_userdata.png)
 
-After Entering all the details the application will diaplay the number of loans the customer is qualified for.
+* After Entering all the details the application will display the number of loans the customer is qualified for.
+
+* The application saves the qualified loan data in **data/qualified_loan.csv**
 
 ---
 
